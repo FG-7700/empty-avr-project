@@ -2,7 +2,7 @@
 # Bare Metal Arduino Makefile                           #
 #########################################################
 # call "make" to compile your program                   #
-# call "make uplaod" to compile and upload your program #
+# call "make upload" to compile and upload your program #
 # call "make clean" to clean the build directories      #
 #########################################################
 # Author: Portable-Navi (protable-navi@proton.me)       #
@@ -38,7 +38,7 @@ CFLAGS := -Os -DF_CPU=1600000UL -mmcu=$(BOARDTYPE) -Wall
 # Project Structure                    #
 ########################################
 # All *.c files at SRC_PATH will be    #
-# automaticly compiled.                #
+# automatically compiled.                #
 # The resulting binary will be placed  #
 # in BIN_PATH. You can change the      #
 # default folders here, if you like.   #
@@ -61,7 +61,7 @@ OBJ_PATH := obj
 
 TARGET := $(BIN_PATH)/$(TARGET_NAME)
 
-# Collects alls source files from SRC_PATH
+# Collects all source files from SRC_PATH
 SRC := $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/*,.c*)))
 
 # Will list all object files to be compiled from SRC

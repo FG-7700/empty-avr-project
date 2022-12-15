@@ -94,6 +94,6 @@ clean:
 	@rm -f $(CLEAN_LIST)
 
 .PHONY: upload
-upload: $(TARGET)
-	sudo avrdude -F -V -c arduino -p $(BOARDTYPE) -P /dev/ttyACM0 -b $(BAUDRATE) -U flash:w:$<
+upload: makedir $(TARGET)
+	sudo -S avrdude -F -V -c arduino -p $(BOARDTYPE) -P /dev/ttyACM0 -b $(BAUDRATE) -U flash:w:$(TARGET)
 

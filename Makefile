@@ -31,7 +31,7 @@ BOARDTYPE := atmega328p
 
 TARGET_NAME := main
 CC = avr-gcc
-CFLAGS := -Os -DF_CPU=1600000UL -mmcu=$(BOARDTYPE) -Wall
+CFLAGS := -Os -DF_CPU=16000000UL -mmcu=$(BOARDTYPE) -Wall
 
 
 ########################################

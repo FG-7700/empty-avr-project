@@ -29,7 +29,7 @@ BOARDTYPE := atmega328p
 # here (TARGET_NAME)                   #
 ########################################
 
-TARGET_NAME := arduino_lar
+TARGET_NAME := main
 CC = avr-gcc
 CFLAGS := -Os -DF_CPU=16000000UL -mmcu=$(BOARDTYPE) -Wall
 

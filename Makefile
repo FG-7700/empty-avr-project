@@ -29,7 +29,7 @@ BOARDTYPE := atmega328p
 # here (TARGET_NAME)                   #
 ########################################
 
-TARGET_NAME := main
+TARGET_NAME := arduino_lar
 CC = avr-gcc
 CFLAGS := -Os -DF_CPU=16000000UL -mmcu=$(BOARDTYPE) -Wall
 
@@ -62,7 +62,7 @@ LINK_LIBRARIES :=
 
 
 TARGET := $(BIN_PATH)/$(TARGET_NAME)
-LIB_TARGET := $(LIB_PATH)/$(TARGET_NAME).lib
+LIB_TARGET := $(LIB_PATH)/$(TARGET_NAME).a
 
 # Collects all source files from SRC_PATH
 SRC := $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/*,.c*)))
@@ -71,7 +71,7 @@ SRC := $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/*,.c*)))
 OBJ := $(addprefix $(OBJ_PATH)/, $(addsuffix .o, $(notdir $(basename $(SRC)))))
 
 # Everything contained in this list will be cleaned on "make clean"
-CLEAN_LIST := $(TARGET) $(OBJ)
+CLEAN_LIST := $(TARGET) $(OBJ) $(LIB_TARGET)
 
 # default rule
 default: makedir all
@@ -81,7 +81,7 @@ $(TARGET): $(OBJ)
 	avr-objcopy -O ihex -R .eeprom $@ $@
 
 $(LIB_TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -c -o $@ $(OBJ) $(LINK_LIBRARIES)
+	ar  rcs $@ $(OBJ) $(LINK_LIBRARIES)
 
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
@@ -90,7 +90,7 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 # phony rules
 .PHONY: makedir
 makedir:
-	@mkdir -p $(BIN_PATH) $(OBJ_PATH)
+	@mkdir -p $(BIN_PATH) $(OBJ_PATH) $(LIB_PATH)
 
 .PHONY: all
 all: $(TARGET)
@@ -106,4 +106,3 @@ clean:
 .PHONY: upload
 upload: makedir $(TARGET)
 	sudo -S avrdude -F -V -c arduino -p $(BOARDTYPE) -P /dev/ttyACM0 -b $(BAUDRATE) -U flash:w:$(TARGET)
-

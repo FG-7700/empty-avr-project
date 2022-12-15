@@ -49,17 +49,20 @@ CFLAGS := -Os -DF_CPU=1600000UL -mmcu=$(BOARDTYPE) -Wall
 BIN_PATH := bin
 SRC_PATH := src
 OBJ_PATH := obj
+LIB_PATH := lib
+LINK_LIBRARIES :=
 
 
 
-########################################
-# You most likely	dont need to change  #
-# anything past this point...          #
-########################################
+#########################################
+# You most likely	dont need to change #
+# anything past this point...           #
+#########################################
 
 
 
 TARGET := $(BIN_PATH)/$(TARGET_NAME)
+LIB_TARGET := $(LIB_PATH)/$(TARGET_NAME).lib
 
 # Collects all source files from SRC_PATH
 SRC := $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/*,.c*)))
@@ -74,8 +77,12 @@ CLEAN_LIST := $(TARGET) $(OBJ)
 default: makedir all
 
 $(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LINK_LIBRARIES)
 	avr-objcopy -O ihex -R .eeprom $@ $@
+
+$(LIB_TARGET): $(OBJ)
+	$(CC) $(CFLAGS) -c -o $@ $(OBJ) $(LINK_LIBRARIES)
+
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
@@ -87,6 +94,9 @@ makedir:
 
 .PHONY: all
 all: $(TARGET)
+
+.PHONY: lib
+lib: makedir $(LIB_TARGET)
 
 .PHONY: clean
 clean:
